@@ -51,23 +51,30 @@ file(GLOB SOURCE_FILES
     src/biblioteca/*/*.cpp
 )
 
-file(GLOB HEADER_FILES 
-    src/headers/Pds/*
-)
+#file(GLOB HEADER_FILES 
+#    src/headers/*
+#)
 
-
+# The variable ADD_INCLUDE_DIRECTORY can be modified by 
+# cmake .. -DADD_INCLUDE_DIRECTORY="/some/directory/include"
 include_directories(src/headers ${ADD_INCLUDE_DIRECTORY})
 
 ################################################################################
 
-set(INTERNAL_LIBRARIES_IN_PROJECT         ${PROJECT_NAME}_static)
+set(INTERNAL_LIBRARIES_IN_PROJECT ${PROJECT_NAME}_static)
 
 add_library(${INTERNAL_LIBRARIES_IN_PROJECT} STATIC ${SOURCE_FILES})
 
 
-# Adding something we can run - Output name matches target name
+# Adding target name
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_link_libraries(${PROJECT_NAME} ${INTERNAL_LIBRARIES_IN_PROJECT} ${TARGET_EXTRA_LINK} ${ADD_LIB_DIRECTORY})
+
+# The variable ADD_LIB_DIRECTORY can be modified by 
+# cmake .. -DADD_LIB_DIRECTORY="-L/some/directory/lib"
+target_link_libraries(  ${PROJECT_NAME} 
+                        ${INTERNAL_LIBRARIES_IN_PROJECT} 
+                        ${TARGET_EXTRA_LINK} 
+                        ${ADD_LIB_DIRECTORY})
 
 
 ################################################################################
@@ -113,7 +120,7 @@ add_subdirectory(test)
 MESSAGE(STATUS "++  ")
 MESSAGE(STATUS "++  Detecting architecture           : ${DEBFILE_ARCH}") 
 MESSAGE(STATUS "++  The program will be installed in : ${CMAKE_INSTALL_PREFIX}")
-MESSAGE(STATUS "++  To change this option            : cmake /path/of/source/code -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
+MESSAGE(STATUS "++  To change the configure options  : cmake /path/of/source/code -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
 MESSAGE(STATUS "++  ")
 
 ################################################################################
